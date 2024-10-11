@@ -48,20 +48,37 @@ For each thread we compute gradient and store it in the struct and as we compute
 
 Dataset is divided into chunk and then each chunk is processed by different chunk and each chunk is processed by a separate thread. Each thread computes the gradient for its assigned portion of the dataset. Once all threads complete their work, the results are combined to update the model parameters.
 
-std::thread(computeGradient, ...): Each thread is created using the std::thread constructor and assigned the computeGradient function to execute. The function takes the following arguments:
+### std::thread(computeGradient, ...): 
+Each thread is created using the std::thread constructor and assigned the computeGradient function to execute. The function takes the following arguments:
+
 1)X and Y: The input feature and target data vectors (passed by constant reference using std::cref to avoid unnecessary copies).
+
 2)theta0 and theta1: The current model parameters (passed as copies to ensure thread safety).
+
 3)start and end: The data range the thread should process.
+
 4)thread_gradients[i]: A reference to a container where the thread will store its computed gradients, allowing the main thread to combine them later.
 
 After that we wait till all the threads combine.
+
 th.joinable(): This checks if the thread is joinable (i.e., if it is still running or can be joined).
+
 th.join(): This blocks the main thread until the thread th finishes execution, ensuring that all threads complete their gradient computations before the main thread proceeds to the next step (like aggregating the gradients and updating the parameters).
 
 
 Purpose of Multithreading:
+
 Parallelization: Instead of having a single thread process the entire dataset, multiple threads are used to compute the gradients in parallel, speeding up the computation, especially for large datasets.
+
 Work Division: Each thread processes a chunk of the dataset (start to end indices), computes the gradient for that portion, and stores the result in thread_gradients[i].
 
+## Stochastic Gradient Descent
+
+Stochastic Gradient Descent (SGD) is a variant of the gradient descent optimization algorithm where the model parameters are updated for each training example, rather than computing the gradient of the cost function with respect to all training examples before updating the parameters.
+
+![image](https://github.com/user-attachments/assets/7838d341-cb09-46fc-bb05-859274746662)
+
+Vanilla Gradient Descent is preferred when the dataset is small enough that computing the gradient for the entire dataset in one go is feasible.
+Stochastic Gradient Descent is ideal when dealing with large datasets where computing the gradient for all samples at once would be computationally prohibitive.
 
 
