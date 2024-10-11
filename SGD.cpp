@@ -29,7 +29,7 @@ void stochastic_gradient_descent_without_multithreading(std::vector<double>& X, 
         //     std::cout << "Iteration " << iter << ": Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
         // }
     }
-
+    std::cout << ": Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
     std::cout << "Using Stochastic Gradient Descent without multithreading:" << std::endl;
     std::cout << "Optimized Theta0: " << theta0 << std::endl;
     std::cout << "Optimized Theta1: " << theta1 << std::endl;
@@ -84,7 +84,7 @@ void stochastic_gradient_descent_with_multithreading(std::vector<double>& X, std
         //     std::cout << "Iteration " << iter << ": Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
         // }
     }
-
+    std::cout << "Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
     std::cout << "Using Stochastic Gradient Descent with multithreading" << std::endl;
     std::cout << "Optimized Theta0: " << theta0 << std::endl;
     std::cout << "Optimized Theta1: " << theta1 << std::endl;

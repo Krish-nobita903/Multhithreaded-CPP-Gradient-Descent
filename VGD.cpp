@@ -40,7 +40,7 @@ void vanilla_gradient_descent_without_multithreading(std::vector<double>&X,std::
         //     std::cout << "Iteration " << iter << ": Cost = " << computeCost(X,Y, theta0, theta1) << std::endl;
         // }
     }
-
+    std::cout << "Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
     // Output final values of theta0 and theta1
     std::cout << "Using Vanilla Gradient Descent without multi threading:" << std::endl;
     std::cout << "Optimized Theta0: " << theta0 << std::endl;
@@ -114,7 +114,7 @@ void vanilla_gradient_descent_with_multithreading(std::vector<double>& X, std::v
         theta0 -= alpha * sum_grad0;
         theta1 -= alpha * sum_grad1;
     }
-
+    std::cout << "Cost = " << computeCost(X, Y, theta0, theta1) << std::endl;
     std::cout << "Using Vanilla Gradient Descent with multithreading" << std::endl;
     std::cout << "Optimized Theta0: " << theta0 << std::endl;
     std::cout << "Optimized Theta1: " << theta1 << std::endl;
