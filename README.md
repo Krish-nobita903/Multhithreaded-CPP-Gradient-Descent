@@ -25,14 +25,10 @@ Vanilla gradient descent is a basic optimization algorithm used to minimize a di
 
 We will proceed by 2 way with multi threading without multi threading 
 ### 1)Without multi threading
-'''
-for (int i = 0; i < m; ++i) {
-    double error = hypothesis(theta0, theta1, X[i]) - Y[i];
-    errorTheta0 += error;
-    errorTheta1 += error * X[i];
-}
 
-'''
+![image](https://github.com/user-attachments/assets/447e9e69-50be-4b25-ae05-45430f0ee7d3)
+
+
 In this hypothesis function function computes the value of h(theta0,theta1) = theta0+theta1*x[i] and the we find error as the difference between hypothesis value and actual value.
 The gradient with respect to theta0 is simply the sum of errors.
 The gradient w.r.t theta1 is  sum of the product of the errors and the corresponding input feature x[i].
@@ -47,24 +43,8 @@ theta(new) = theta(old) + (alpha)*errorTheta{obtained by above code}.
 First create a structure of gradient to store gradient for each thread
 For each thread we compute gradient and store it in the struct and as we compute for each thread , at each iteration then we combine the gradient obtained from each thread.
 
-'''
+![image](https://github.com/user-attachments/assets/87524641-e77c-4563-ac9f-5249b159bfee)
 
-//Split the data across threads and start them
-    
-  for (int i = 0; i < num_threads; ++i) {
-        int start = i * chunk_size;
-        int end = (i == num_threads - 1) ? m : start + chunk_size;
-        threads.push_back(std::thread(computeGradient, std::cref(X), std::cref(Y), theta0, theta1, start, end, std::ref(thread_gradients[i])));
-    }
-
-  //Wait for all threads to finish
-    for (auto& th : threads) {
-        if (th.joinable()) {
-            th.join();
-        }
-    }
-
-'''
 
 Dataset is divided into chunk and then each chunk is processed by different chunk and each chunk is processed by a separate thread. Each thread computes the gradient for its assigned portion of the dataset. Once all threads complete their work, the results are combined to update the model parameters.
 
