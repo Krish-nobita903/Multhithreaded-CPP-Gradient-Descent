@@ -18,3 +18,70 @@ So to generate dataset , we use the expression y = theta0 + theta1*x + noise , t
 for noise we use rand function which will genearte a random number between 0.0 to 0.99 and then scale it to -0.5 to 0.49 to centre it around 0.
 
 And thus we store corresponding X and Y values in vectors and our dataset is prepared.
+
+## Vanilla Gradient Descent
+
+Vanilla gradient descent is a basic optimization algorithm used to minimize a differentiable function by iteratively updating the parameters in the opposite direction of the gradient of the function with respect to those parameters. The goal is to find the set of parameters that minimize the cost function. Each update is controlled by a learning rate, which determines the step size towards the minimum.
+
+We will proceed by 2 way with multi threading without multi threading 
+### 1)Without multi threading
+'''
+for (int i = 0; i < m; ++i) {
+    double error = hypothesis(theta0, theta1, X[i]) - Y[i];
+    errorTheta0 += error;
+    errorTheta1 += error * X[i];
+}
+
+'''
+In this hypothesis function function computes the value of h(theta0,theta1) = theta0+theta1*x[i] and the we find error as the difference between hypothesis value and actual value.
+The gradient with respect to theta0 is simply the sum of errors.
+The gradient w.r.t theta1 is  sum of the product of the errors and the corresponding input feature x[i].
+![image](https://github.com/user-attachments/assets/d72c4522-17ae-4b6b-985f-7932f4ec539a)
+![image](https://github.com/user-attachments/assets/d9730683-7e26-48b2-aeb2-6197034ab8c6)
+
+then we can simpply update the parameter using update equation
+theta(new) = theta(old) + (alpha)*errorTheta{obtained by above code}.
+
+### 2)With Multi-Threading
+
+First create a structure of gradient to store gradient for each thread
+For each thread we compute gradient and store it in the struct and as we compute for each thread , at each iteration then we combine the gradient obtained from each thread.
+
+'''
+
+//Split the data across threads and start them
+    
+  for (int i = 0; i < num_threads; ++i) {
+        int start = i * chunk_size;
+        int end = (i == num_threads - 1) ? m : start + chunk_size;
+        threads.push_back(std::thread(computeGradient, std::cref(X), std::cref(Y), theta0, theta1, start, end, std::ref(thread_gradients[i])));
+    }
+
+  //Wait for all threads to finish
+    for (auto& th : threads) {
+        if (th.joinable()) {
+            th.join();
+        }
+    }
+
+'''
+
+Dataset is divided into chunk and then each chunk is processed by different chunk and each chunk is processed by a separate thread. Each thread computes the gradient for its assigned portion of the dataset. Once all threads complete their work, the results are combined to update the model parameters.
+
+std::thread(computeGradient, ...): Each thread is created using the std::thread constructor and assigned the computeGradient function to execute. The function takes the following arguments:
+1)X and Y: The input feature and target data vectors (passed by constant reference using std::cref to avoid unnecessary copies).
+2)theta0 and theta1: The current model parameters (passed as copies to ensure thread safety).
+3)start and end: The data range the thread should process.
+4)thread_gradients[i]: A reference to a container where the thread will store its computed gradients, allowing the main thread to combine them later.
+
+After that we wait till all the threads combine.
+th.joinable(): This checks if the thread is joinable (i.e., if it is still running or can be joined).
+th.join(): This blocks the main thread until the thread th finishes execution, ensuring that all threads complete their gradient computations before the main thread proceeds to the next step (like aggregating the gradients and updating the parameters).
+
+
+Purpose of Multithreading:
+Parallelization: Instead of having a single thread process the entire dataset, multiple threads are used to compute the gradients in parallel, speeding up the computation, especially for large datasets.
+Work Division: Each thread processes a chunk of the dataset (start to end indices), computes the gradient for that portion, and stores the result in thread_gradients[i].
+
+
+
