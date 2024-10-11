@@ -81,4 +81,38 @@ Stochastic Gradient Descent (SGD) is a variant of the gradient descent optimizat
 Vanilla Gradient Descent is preferred when the dataset is small enough that computing the gradient for the entire dataset in one go is feasible.
 Stochastic Gradient Descent is ideal when dealing with large datasets where computing the gradient for all samples at once would be computationally prohibitive.
 
+## Accelerated Gradient Descent(Nesterov Accelerated Gradient/Gradient descent with momentum)
+
+Accelerated Gradient Descent, often referred to as Nesterov Accelerated Gradient (NAG), is an optimization algorithm that improves upon vanilla gradient descent by adding a momentum term. The idea is to "accelerate" the convergence process by taking into account the gradient at a future point instead of the current point. This technique helps speed up convergence, especially in situations where gradient descent oscillates, like in regions with high curvature.
+
+Nesterov Accelerated Gradient Descent Update Rule
+
+Velocity Update: You introduce a velocity term that accumulates the updates over time. This velocity helps to smooth out the updates and avoid oscillations.
+
+![image](https://github.com/user-attachments/assets/7092407d-921f-427b-918e-29c1e800b389)
+
+Parameter Update: Update the parameters using the velocity term.
+
+![image](https://github.com/user-attachments/assets/a14d8770-c280-43dc-8fbc-5d694a6397cd)
+
+![image](https://github.com/user-attachments/assets/1c8d6731-9b53-4d99-a491-acabd2290362)
+
+## Result
+
+![image](https://github.com/user-attachments/assets/ea272cbd-c623-408f-bfe2-37a004649577)
+
+Iteration count:
+
+1)Vanilla Gradient descent without multi threading : 1000000
+
+2)Vanilla Gradient Descent with multi threading : 100000
+
+3)Stochastic Gradient descent without multi threading : 150000
+
+4)Stochastic Gradient descent with multi threading : 10000
+
+5)Accelerated Gradient Descent : 15000
+
+
+
 
