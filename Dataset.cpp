@@ -21,7 +21,7 @@ void generateData(std::vector<double>&X,std::vector<double>&Y,int dataSize,doubl
 void createData(std::vector<double>&X,std::vector<double>&Y)
 {
     // Assuming a simple linear regression y = a+bx
-    int dataSize = 100000;
+    int dataSize = 100;
     double trueTheta0 = 5.5;  // True intercept (now a double)
     double trueTheta1 = 2.3;  // True slope (now a double)
 
